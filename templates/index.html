@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+  <h1>Eat Smart,<br>Live Better 🌿</h1>
+  <p>Your personal diet planner that creates customized meal plans based on your health goals.</p>
+  <a href="{{ url_for('profile') }}" class="btn-gold">🚀 Get Started – It's Free</a>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-box">
+    <div class="stat-num">🥗</div>
+    <div style="font-weight:700;margin-top:6px;">Personalized Plans</div>
+    <div class="stat-label">Based on your BMI & goals</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">💧</div>
+    <div style="font-weight:700;margin-top:6px;">Hydration Tracking</div>
+    <div class="stat-label">Daily water intake monitor</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">📊</div>
+    <div style="font-weight:700;margin-top:6px;">Calorie Counter</div>
+    <div class="stat-label">Track every meal easily</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title"><span class="card-icon">📋</span> How It Works</div>
+  <div class="steps-grid">
+    <div>
+      <div class="step-num">1️⃣</div>
+      <div class="step-title">Enter Your Profile</div>
+      <div class="step-desc">Age, weight, height & health goal</div>
+    </div>
+    <div>
+      <div class="step-num">2️⃣</div>
+      <div class="step-title">Get Diet Plan</div>
+      <div class="step-desc">Auto-generated full-day meal plan</div>
+    </div>
+    <div>
+      <div class="step-num">3️⃣</div>
+      <div class="step-title">Track Progress</div>
+      <div class="step-desc">Log meals & track calories daily</div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

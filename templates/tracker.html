@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Tracker{% endblock %}
+
+{% block content %}
+
+<h2 class="section-title">📊 Daily Tracker</h2>
+<p class="section-sub">Track your calories and water intake today – {{ name }}</p>
+
+<!-- STATS -->
+<div class="stats-grid">
+  <div class="stat-box">
+    <div class="stat-num">{{ consumed }}</div>
+    <div class="stat-label">Calories Consumed</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">{{ target }}</div>
+    <div class="stat-label">Daily Target</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">{{ remaining }}</div>
+    <div class="stat-label">Remaining</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="card">
+  <div class="card-title"><span class="card-icon">📈</span> Calorie Progress</div>
+  <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--gray);margin-bottom:6px;">
+    <span>0 kcal</span>
+    <span>{{ pct }}%</span>
+    <span>{{ target }} kcal</span>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-fill" style="width:{{ pct }}%"></div>
+  </div>
+  {% if pct >= 100 %}
+  <p style="color:var(--accent);font-weight:600;margin-top:8px;text-align:center;">
+    🚨 You have reached your daily calorie limit!
+  </p>
+  {% elif pct >= 80 %}
+  <p style="color:#f59e0b;font-weight:600;margin-top:8px;text-align:center;">
+    ⚠️ You are close to your daily calorie limit!
+  </p>
+  {% endif %}
+</div>
+
+<!-- ADD FOOD -->
+<div class="card">
+  <div class="card-title"><span class="card-icon">➕</span> Log a Meal</div>
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Food Name</label>
+      <input type="text" id="foodName" placeholder="e.g. Idli (2 pieces)">
+    </div>
+    <div class="form-group">
+      <label>Calories (kcal)</label>
+      <input type="number" id="foodCal" placeholder="e.g. 150">
+    </div>
+  </div>
+
+  <div class="mt-16">
+    <label style="font-size:0.82rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.6px;">
+      Quick Add (Indian Foods)
+    </label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+      <button class="btn-secondary" onclick="quickAdd('Idli (2 pcs)',150)">Idli – 150</button>
+      <button class="btn-secondary" onclick="quickAdd('Dosa',200)">Dosa – 200</button>
+      <button class="btn-secondary" onclick="quickAdd('Rice (1 cup)',206)">Rice – 206</button>
+      <button class="btn-secondary" onclick="quickAdd('Dal (1 cup)',180)">Dal – 180</button>
+      <button class="btn-secondary" onclick="quickAdd('Chapati (1)',100)">Chapati – 100</button>
+      <button class="btn-secondary" onclick="quickAdd('Egg (1)',78)">Egg – 78</button>
+      <button class="btn-secondary" onclick="quickAdd('Banana',89)">Banana – 89</button>
+      <button class="btn-secondary" onclick="quickAdd('Milk (1 glass)',120)">Milk – 120</button>
+      <button class="btn-secondary" onclick="quickAdd('Sambar (1 cup)',95)">Sambar – 95</button>
+      <button class="btn-secondary" onclick="quickAdd('Poha (1 cup)',250)">Poha – 250</button>
+    </div>
+  </div>
+
+  <div class="mt-16">
+    <button class="btn-primary" onclick="addFood()">➕ Add to Log</button>
+  </div>
+</div>
+
+<!-- FOOD LOG -->
+<div class="card">
+  <div class="card-title">
+    <span class="card-icon">📋</span> Today's Food Log
+    <span style="background:var(--accent);color:white;border-radius:50px;padding:2px 10px;font-size:0.75rem;font-weight:700;">
+      {{ food_items|length }}
+    </span>
+  </div>
+
+  {% if food_items %}
+    {% for food in food_items %}
+    <div class="food-log-item">
+      <div>
+        <div class="food-log-name">{{ food[0] }}</div>
+        <div style="font-size:0.8rem;color:var(--gray);">Logged today</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="food-log-cal">{{ food[1] }} kcal</span>
+        <button class="btn-danger" onclick="deleteFood({{ food[2] }})">🗑</button>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">🍽</div>
+      <div>No food logged yet. Add your first meal!</div>
+    </div>
+  {% endif %}
+</div>
+
+<hr class="divider">
+
+<!-- WATER TRACKER -->
+<div class="card">
+  <div class="card-title"><span class="card-icon">💧</span> Water Intake Tracker</div>
+  <p style="color:var(--gray);font-size:0.9rem;margin-bottom:4px;">
+    Click each cup to mark as drank. Goal: 8 cups/day
+  </p>
+  <input type="hidden" id="waterCount" value="{{ water_cups }}">
+  <div class="water-cups" id="waterCups"></div>
+  <p id="waterText" style="color:var(--green);font-weight:600;margin-top:8px;"></p>
+  <button class="btn-secondary mt-16" onclick="resetWater()">🔄 Reset Water</button>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Diet Plan{% endblock %}
+
+{% block content %}
+
+<h2 class="section-title">🍽 Your Personalized Diet Plan</h2>
+<p class="section-sub">A full-day meal plan tailored just for you</p>
+
+<div class="card">
+  <div class="card-title"><span class="card-icon">👤</span> Plan For: <span style="color:var(--accent);margin-left:6px;">{{ name }}</span></div>
+  <div>
+    <span class="tag">BMI: {{ bmi }}</span>
+    <span class="tag tag-gold">🔥 {{ daily_calories }} kcal/day</span>
+    <span class="tag">{{ goal_label }}</span>
+    <span class="tag tag-orange">{{ pref_label }}</span>
+  </div>
+
+  <!-- BMI Box -->
+  <div class="bmi-box mt-24"
+       style="background:{{ bmi_color }}18; border:2px solid {{ bmi_color }};">
+    <div class="bmi-number" style="color:{{ bmi_color }};">{{ bmi }}</div>
+    <div class="bmi-label"  style="color:{{ bmi_color }};">{{ bmi_category }}</div>
+  </div>
+</div>
+
+<!-- MEAL CARDS -->
+<div class="card">
+  <div class="card-title"><span class="card-icon">🍽</span> Today's Meal Schedule</div>
+  <div class="meal-grid">
+    {% for meal in meals %}
+    <div class="meal-card">
+      <div class="meal-time">{{ meal.time }}</div>
+      <div class="meal-name">{{ meal.name }}</div>
+      <div class="meal-cal">{{ meal.cal }}</div>
+      <div class="meal-items">{{ meal.items }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- WATER -->
+<div class="card">
+  <div class="card-title"><span class="card-icon">💧</span> Daily Water Goal</div>
+  <p style="color:var(--gray);margin-bottom:14px;">
+    Drink at least <strong style="color:var(--green);">8 glasses (2 litres)</strong> of water every day.
+  </p>
+  <div style="background:var(--green-pale);border-radius:12px;padding:16px;font-size:0.9rem;color:var(--green);">
+    💡 Drink a glass of water 30 minutes before each meal to aid digestion and reduce overeating.
+  </div>
+</div>
+
+<!-- AVOID -->
+<div class="card">
+  <div class="card-title"><span class="card-icon">🚫</span> Foods to Avoid</div>
+  {% for item in avoid %}
+  <div class="avoid-item">❌ {{ item }}</div>
+  {% endfor %}
+</div>
+
+<div class="text-center mt-24">
+  <a href="{{ url_for('tracker') }}" class="btn-primary">📊 Go to Daily Tracker →</a>
+</div>
+
+{% endblock %}

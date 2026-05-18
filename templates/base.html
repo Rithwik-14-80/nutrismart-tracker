@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriSmart – {% block title %}Smart Diet Planner{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav>
+  <a href="{{ url_for('home') }}" class="logo">Nutri<span>Smart</span> 🥗</a>
+  <div class="nav-links">
+    <a href="{{ url_for('home') }}"      class="{{ 'active' if request.endpoint=='home' }}">🏠 Home</a>
+    <a href="{{ url_for('profile') }}"   class="{{ 'active' if request.endpoint=='profile' }}">👤 Profile</a>
+    <a href="{{ url_for('diet_plan') }}" class="{{ 'active' if request.endpoint=='diet_plan' }}">🍽 Diet Plan</a>
+    <a href="{{ url_for('tracker') }}"   class="{{ 'active' if request.endpoint=='tracker' }}">📊 Tracker</a>
+    <a href="{{ url_for('tips') }}"      class="{{ 'active' if request.endpoint=='tips' }}">💡 Tips</a>
+  </div>
+</nav>
+
+<div class="container fade-up">
+  {% block content %}{% endblock %}
+</div>
+
+<div id="toast"></div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
