@@ -10,7 +10,8 @@ app.secret_key = "nutrismart_secret_key_2024"
 #  DATABASE SETUP
 # ─────────────────────────────────────────
 def init_db():
-    conn = sqlite3.connect('database/diet.db')
+    # Changed path to root so Render doesn't crash looking for a folder
+    conn = sqlite3.connect('diet.db')
     c = conn.cursor()
 
     c.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -45,6 +46,9 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+# Run this immediately so Gunicorn builds the tables on Render startup
+init_db()
 
 # ─────────────────────────────────────────
 #  HELPER FUNCTIONS
@@ -178,9 +182,8 @@ def profile():
         cal      = calculate_calories(weight, height, age, gender, activity, goal)
         category, color = bmi_category(bmi)
 
-        # Save to DB
-        os.makedirs('database', exist_ok=True)
-        conn = sqlite3.connect('database/diet.db')
+        # Connect straight to diet.db
+        conn = sqlite3.connect('diet.db')
         c = conn.cursor()
         c.execute('''INSERT INTO users (name,age,gender,weight,height,activity,goal,diet_pref,condition,bmi,daily_calories)
                      VALUES (?,?,?,?,?,?,?,?,?,?,?)''',
@@ -232,7 +235,7 @@ def tracker():
         return redirect(url_for('profile'))
 
     user_id = session['user_id']
-    conn = sqlite3.connect('database/diet.db')
+    conn = sqlite3.connect('diet.db')
     c = conn.cursor()
     c.execute("SELECT food_name, calories, id FROM food_log WHERE user_id=? AND date=date('now')", (user_id,))
     food_items = c.fetchall()
@@ -263,7 +266,7 @@ def add_food():
     data = request.get_json()
     food_name = data.get('food_name')
     calories  = int(data.get('calories', 0))
-    conn = sqlite3.connect('database/diet.db')
+    conn = sqlite3.connect('diet.db')
     c = conn.cursor()
     c.execute("INSERT INTO food_log (user_id, food_name, calories) VALUES (?,?,?)",
               (session['user_id'], food_name, calories))
@@ -273,7 +276,7 @@ def add_food():
 
 @app.route('/delete-food/<int:food_id>', methods=['POST'])
 def delete_food(food_id):
-    conn = sqlite3.connect('database/diet.db')
+    conn = sqlite3.connect('diet.db')
     c = conn.cursor()
     c.execute("DELETE FROM food_log WHERE id=?", (food_id,))
     conn.commit()
@@ -286,7 +289,7 @@ def update_water():
         return jsonify({'error': 'Not logged in'}), 403
     data = request.get_json()
     cups = int(data.get('cups', 0))
-    conn = sqlite3.connect('database/diet.db')
+    conn = sqlite3.connect('diet.db')
     c = conn.cursor()
     c.execute("SELECT id FROM water_log WHERE user_id=? AND date=date('now')", (session['user_id'],))
     row = c.fetchone()
@@ -303,6 +306,5 @@ def tips():
     return render_template('tips.html')
 
 if __name__ == '__main__':
-    os.makedirs('database', exist_ok=True)
-    init_db()
+    # Local fallback
     app.run(debug=True)
