@@ -1,5 +1,5 @@
 # 🥗 NutriSmart – Smart Diet Planner
-### Diploma Final Year Project | CSE | By M. Thirumal Reddy
+
 
 ---
 
