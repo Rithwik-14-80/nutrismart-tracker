@@ -93,5 +93,5 @@ python app.py
 ---
 
 ## 👨‍💻 Developer
-**M. Thirumal Reddy**
+**G. Rithwik**
 Diploma Final Year – Computer Science Engineering
